@@ -1,0 +1,29 @@
+<launch>
+
+
+  <!-- Launch Gazebo  -->
+  <include file="$(find seven_dof_arm_gazebo)/launch/seven_dof_arm_world.launch" />   
+
+  <!-- ros_control seven dof arm launch file -->
+  <include file="$(find seven_dof_arm_gazebo)/launch/seven_dof_arm_gazebo_states.launch" />   
+
+  <!-- ros_control position control dof arm launch file -->
+  <include file="$(find seven_dof_arm_gazebo)/launch/seven_dof_arm_gazebo_position.launch" />  
+
+  <!-- ros_control trajectory control dof arm launch file -->
+  <include file="$(find seven_dof_arm_gazebo)/launch/seven_dof_arm_trajectory_controller.launch" />    
+
+  <!-- moveit launch file -->
+  <include file="$(find seven_dof_arm_config)/launch/moveit_planning_execution.launch" />    
+   <arg name="config" default="true" />
+  <!--<arg     if="$(arg config)" name="command_args" value="-d $(find seven_dof_arm_config)/launch/moveit.rviz" />-->
+  <arg if="$(arg config)" name="command_args" value="-d $(find seven_dof_arm_gazebo)/config/moveit_gazebo.rviz" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="/use_gui" value="false"/>
+    <rosparam param="/source_list">[/seven_dof_arm/joint_states]</rosparam>
+  </node>
+
+  <!--<node pkg="seven_dof_arm_test" type="hku_test_class.py" name="hku" output="screen"/>-->
+  
+</launch>
